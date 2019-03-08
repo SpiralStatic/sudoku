@@ -5,7 +5,7 @@ namespace Sudoku.Core.Models
     public class SudokuNumber : IEquatable<SudokuNumber>
     {
         public (int, int) Index { get; set; }
-        public int Number { get; set; }
+        public byte Number { get; set; }
 
         public int Row => Index.Item1;
         public int Column => Index.Item2;

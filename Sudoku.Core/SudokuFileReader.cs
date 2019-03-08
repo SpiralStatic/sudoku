@@ -23,7 +23,7 @@ namespace Sudoku.Core
                     .Select((number, columnIndex) => new SudokuNumber
                     {
                         Index = (rowIndex, columnIndex),
-                        Number = int.Parse(number.ToString())
+                        Number = byte.Parse(number.ToString())
                     })
                 )
                 .Aggregate(new List<SudokuNumber>(), (acc, row) =>

@@ -24,7 +24,7 @@ namespace Sudoku.Core
                     .Select(n => byte.Parse(n.ToString()))
                     .ToArray();
 
-                for (var j = 0; j < numbers[i]; j++)
+                for (var j = 0; j < numbers.Length; j++)
                 {
                     numberGrid[i, j] = numbers[j];
                 }

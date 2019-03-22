@@ -15,7 +15,7 @@ namespace Sudoku.Core.Extensions
             for (var i = 0; i < rowsArray.Count(); i += 9)
             {
                 var rowIndex = i;
-                var row = rowsArray.Where(n => n == rowIndex / 9);
+                var row = rowsArray.Skip(i).Take(9);
                 logger.LogInformation(string.Join("", row));
             }
 

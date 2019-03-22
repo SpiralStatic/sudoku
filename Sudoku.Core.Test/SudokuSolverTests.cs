@@ -54,5 +54,27 @@ namespace Sudoku.Core.Test
 
             Assert.Equal(expectedNewNumber, solvedNumber);
         }
+
+        [Theory]
+        [InlineData(0, 0)]
+        [InlineData(1, 0)]
+        [InlineData(2, 0)]
+        [InlineData(3, 1)]
+        [InlineData(4, 1)]
+        [InlineData(5, 1)]
+        [InlineData(6, 2)]
+        [InlineData(7, 2)]
+        [InlineData(8, 2)]
+        public void Scale_GivenNumber_ReturnScaledNumber(int number, int expectedScaledNumber)
+        {
+            var min = 0;
+            var max = 8;
+            var minScale = 0;
+            var maxScale = 2;
+
+            var scaledNumber = SudokuSolver.Scale(number, min, max, minScale, maxScale);
+
+            Assert.Equal(expectedScaledNumber, scaledNumber);
+        }
     }
 }

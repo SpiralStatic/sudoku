@@ -34,10 +34,10 @@ namespace Sudoku.Core
 
                         _numberGrid.Numbers[row, column] = newNumber;
                     }
-                }
-                else
-                {
-                    notSolved = true;
+                    else
+                    {
+                        notSolved = true;
+                    }
                 }
             }
 
@@ -76,7 +76,7 @@ namespace Sudoku.Core
             return false;
         }
 
-        private double Scale(int value, int min, int max, int minScale, int maxScale)
+        public static double Scale(int value, int min, int max, int minScale, int maxScale)
         {
             var scaled = minScale + (double)(value - min) / (max - min) * (maxScale - minScale);
             return Math.Round(scaled);

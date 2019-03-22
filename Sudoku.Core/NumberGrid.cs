@@ -5,18 +5,18 @@ namespace Sudoku.Core
     public class NumberGrid
     {
         public byte[,] Numbers { get; set; }
-        public Dictionary<(byte, byte), HashSet<byte>> Squares => CreateSquareSets();
-        public Dictionary<byte, HashSet<byte>> Rows => CreateRowSets();
-        public Dictionary<byte, HashSet<byte>> Columns => CreateColumnSets();
+        public Dictionary<(byte, byte), List<byte>> Squares => CreateSquareSets();
+        public Dictionary<byte, List<byte>> Rows => CreateRowSets();
+        public Dictionary<byte, List<byte>> Columns => CreateColumnSets();
 
         public NumberGrid(byte[,] numbers)
         {
             Numbers = numbers;
         }
 
-        public Dictionary<(byte, byte), HashSet<byte>> CreateSquareSets()
+        public Dictionary<(byte, byte), List<byte>> CreateSquareSets()
         {
-            var sudokuSets = new Dictionary<(byte, byte), HashSet<byte>>();
+            var sudokuSets = new Dictionary<(byte, byte), List<byte>>();
 
             for (byte rowSet = 0; rowSet < 9; rowSet += 3)
             {
@@ -24,7 +24,7 @@ namespace Sudoku.Core
                 {
                     var rowIndex = (byte)(rowSet / 3);
                     var columnIndex = (byte)(columnSet / 3); ;
-                    sudokuSets.Add((rowIndex, columnIndex), new HashSet<byte>
+                    sudokuSets.Add((rowIndex, columnIndex), new List<byte>
                     {
                         Numbers[rowSet, columnSet],
                         Numbers[rowSet, columnSet + 1],
@@ -42,12 +42,12 @@ namespace Sudoku.Core
             return sudokuSets;
         }
 
-        public Dictionary<byte, HashSet<byte>> CreateRowSets()
+        public Dictionary<byte, List<byte>> CreateRowSets()
         {
-            var rowSets = new Dictionary<byte, HashSet<byte>>();
+            var rowSets = new Dictionary<byte, List<byte>>();
             for (byte row = 0; row < 9; row++)
             {
-                var rowSet = new HashSet<byte>();
+                var rowSet = new List<byte>();
 
                 for (var column = 0; column < 9; column++)
                 {
@@ -60,12 +60,12 @@ namespace Sudoku.Core
             return rowSets;
         }
 
-        public Dictionary<byte, HashSet<byte>> CreateColumnSets()
+        public Dictionary<byte, List<byte>> CreateColumnSets()
         {
-            var columnSets = new Dictionary<byte, HashSet<byte>>();
+            var columnSets = new Dictionary<byte, List<byte>>();
             for (byte column = 0; column < 9; column++)
             {
-                var columnSet = new HashSet<byte>();
+                var columnSet = new List<byte>();
 
                 for (var row = 0; row < 9; row++)
                 {

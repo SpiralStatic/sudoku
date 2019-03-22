@@ -1,5 +1,3 @@
-using Sudoku.Core.Models;
-using System.Linq;
 using Xunit;
 
 namespace Sudoku.Core.Test
@@ -16,7 +14,7 @@ namespace Sudoku.Core.Test
 
             NumberGrid numberGrid = sudokuFileReader.ReadSudoku();
 
-            Assert.True(expectedNumbers.SequenceEqual(numberGrid.Numbers));
+            Assert.Equal(expectedNumbers, numberGrid.Numbers);
         }
     }
 }

@@ -1,6 +1,4 @@
-using Sudoku.Core.Models;
 using System.Collections.Generic;
-using System.Linq;
 using Xunit;
 
 namespace Sudoku.Core.Test
@@ -8,141 +6,154 @@ namespace Sudoku.Core.Test
     public class NumberGridTests
     {
         [Fact]
-        public void CreateSquareSet_GivenNumbers_ReturnsFirstSquareSet()
+        public void CreateSquareSets_GivenSquareIndex_ReturnsFirstSquareSet()
         {
             var numbers = SudokuExamples.Example;
             var numberGrid = new NumberGrid(numbers);
-            var expectedSet = new HashSet<SudokuNumber>(new List<SudokuNumber>
+            var expectedSet = new HashSet<byte>(new List<byte>
             {
-                new SudokuNumber {Index = (0, 0), Number = 0},
-                new SudokuNumber {Index = (0, 1), Number = 0},
-                new SudokuNumber {Index = (0, 2), Number = 3},
-                new SudokuNumber {Index = (1, 0), Number = 9},
-                new SudokuNumber {Index = (1, 1), Number = 0},
-                new SudokuNumber {Index = (1, 2), Number = 0},
-                new SudokuNumber {Index = (2, 0), Number = 0},
-                new SudokuNumber {Index = (2, 1), Number = 0},
-                new SudokuNumber {Index = (2, 2), Number = 1}
+                0, 0, 3, 9, 0, 0, 0, 0, 1
             });
 
-            var firstSquareSet = numberGrid.CreateSquareSets();
-    
-            Assert.True(expectedSet.SetEquals(firstSquareSet.ElementAt(0)));
+            var squareSets = numberGrid.CreateSquareSets();
+            squareSets.TryGetValue((0, 0), out var firstSquareSet);
+
+            Assert.NotNull(firstSquareSet);
+            Assert.True(expectedSet.SetEquals(firstSquareSet));
         }
 
         [Fact]
-        public void CreateSquareSet_GivenNumbers_ReturnsSecondSquareSet()
+        public void CreateSquareSets_GivenSquareIndex_ReturnsSecondSquareSet()
         {
             var numbers = SudokuExamples.Example;
             var numberGrid = new NumberGrid(numbers);
-            var expectedSet = new HashSet<SudokuNumber>(new List<SudokuNumber>
+            var expectedSet = new HashSet<byte>(new List<byte>
             {
-                new SudokuNumber {Index = (0, 3), Number = 0},
-                new SudokuNumber {Index = (0, 4), Number = 2},
-                new SudokuNumber {Index = (0, 5), Number = 0},
-                new SudokuNumber {Index = (1, 3), Number = 3},
-                new SudokuNumber {Index = (1, 4), Number = 0},
-                new SudokuNumber {Index = (1, 5), Number = 5},
-                new SudokuNumber {Index = (2, 3), Number = 8},
-                new SudokuNumber {Index = (2, 4), Number = 0},
-                new SudokuNumber {Index = (2, 5), Number = 6}
+                0, 2, 0, 3, 0, 5, 8, 0, 6
             });
 
-            var secondSquareSet = numberGrid.CreateSquareSets();
+            var squareSets = numberGrid.CreateSquareSets();
+            squareSets.TryGetValue((0, 1), out var secondSquareSet);
 
-            Assert.True(expectedSet.SetEquals(secondSquareSet.ElementAt(1)));
+            Assert.NotNull(secondSquareSet);
+            Assert.True(expectedSet.SetEquals(secondSquareSet));
         }
 
         [Fact]
-        public void CreateSquareSet_GivenNumbers_ReturnsLastSquareSet()
+        public void CreateSquareSets_GivenSquareIndex_ReturnsLastSquareSet()
         {
             var numbers = SudokuExamples.Example;
             var numberGrid = new NumberGrid(numbers);
-            var expectedSet = new HashSet<SudokuNumber>(new List<SudokuNumber>
+            var expectedSet = new HashSet<byte>(new List<byte>
             {
-                new SudokuNumber {Index = (6, 6), Number = 5},
-                new SudokuNumber {Index = (6, 7), Number = 0},
-                new SudokuNumber {Index = (6, 8), Number = 0},
-                new SudokuNumber {Index = (7, 6), Number = 0},
-                new SudokuNumber {Index = (7, 7), Number = 0},
-                new SudokuNumber {Index = (7, 8), Number = 9},
-                new SudokuNumber {Index = (8, 6), Number = 3},
-                new SudokuNumber {Index = (8, 7), Number = 0},
-                new SudokuNumber {Index = (8, 8), Number = 0}
+                5, 0, 0, 0, 0, 9, 3, 0, 0
             });
 
-            var lastSquareSet = numberGrid.CreateSquareSets();
+            var squareSets = numberGrid.CreateSquareSets();
+            squareSets.TryGetValue((2, 2), out var lastSquareSet);
 
-            Assert.True(expectedSet.SetEquals(lastSquareSet.ElementAt(8)));
+            Assert.NotNull(lastSquareSet);
+            Assert.True(expectedSet.SetEquals(lastSquareSet));
         }
 
         [Fact]
-        public void CreateRowSet_GivenNumbers_ReturnsFirstSquareSet()
+        public void CreateRowSets_GivenRowIndex_ReturnsFirstRowSet()
         {
             var numbers = SudokuExamples.Example;
             var numberGrid = new NumberGrid(numbers);
-            var expectedSet = new HashSet<SudokuNumber>(new List<SudokuNumber>
+            var expectedSet = new HashSet<byte>(new List<byte>
             {
-                new SudokuNumber {Index = (0, 0), Number = 0},
-                new SudokuNumber {Index = (0, 1), Number = 0},
-                new SudokuNumber {Index = (0, 2), Number = 3},
-                new SudokuNumber {Index = (0, 3), Number = 0},
-                new SudokuNumber {Index = (0, 4), Number = 2},
-                new SudokuNumber {Index = (0, 5), Number = 0},
-                new SudokuNumber {Index = (0, 6), Number = 6},
-                new SudokuNumber {Index = (0, 7), Number = 0},
-                new SudokuNumber {Index = (0, 8), Number = 0}
+                0, 0, 3, 0, 2, 0, 6, 0, 0
             });
 
-            var firstRowSet = numberGrid.CreateRowSet(numbers, 0);
+            var rowSets = numberGrid.CreateRowSets();
+            rowSets.TryGetValue(0, out var firstRowSet);
 
+            Assert.NotNull(firstRowSet);
             Assert.True(expectedSet.SetEquals(firstRowSet));
         }
 
         [Fact]
-        public void CreateRowSet_GivenNumbers_ReturnsSecondSquareSet()
+        public void CreateRowSets_GivenRowIndex_ReturnsSecondRowSet()
         {
             var numbers = SudokuExamples.Example;
             var numberGrid = new NumberGrid(numbers);
-            var expectedSet = new HashSet<SudokuNumber>(new List<SudokuNumber>
+            var expectedSet = new HashSet<byte>(new List<byte>
             {
-                new SudokuNumber {Index = (1, 0), Number = 9},
-                new SudokuNumber {Index = (1, 1), Number = 0},
-                new SudokuNumber {Index = (1, 2), Number = 0},
-                new SudokuNumber {Index = (1, 3), Number = 3},
-                new SudokuNumber {Index = (1, 4), Number = 0},
-                new SudokuNumber {Index = (1, 5), Number = 5},
-                new SudokuNumber {Index = (1, 6), Number = 0},
-                new SudokuNumber {Index = (1, 7), Number = 0},
-                new SudokuNumber {Index = (1, 8), Number = 1}
+                9, 0, 0, 3, 0, 5, 0, 0, 1
             });
 
-            var secondRowSet = numberGrid.CreateRowSet(numbers, 1);
+            var rowSets = numberGrid.CreateRowSets();
+            rowSets.TryGetValue(1, out var secondRowSet);
 
+            Assert.NotNull(secondRowSet);
             Assert.True(expectedSet.SetEquals(secondRowSet));
         }
 
         [Fact]
-        public void CreateColumnSet_GivenNumbersAndIndexOf1_ReturnsFirstSquareSet()
+        public void CreateRowSets_GivenRowIndex_ReturnsLastRowSet()
         {
             var numbers = SudokuExamples.Example;
             var numberGrid = new NumberGrid(numbers);
-            var expectedSet = new HashSet<SudokuNumber>(new List<SudokuNumber>
+            var expectedSet = new HashSet<byte>(new List<byte>
             {
-                new SudokuNumber {Index = (0, 0), Number = 0},
-                new SudokuNumber {Index = (1, 0), Number = 9},
-                new SudokuNumber {Index = (2, 0), Number = 0},
-                new SudokuNumber {Index = (3, 0), Number = 0},
-                new SudokuNumber {Index = (4, 0), Number = 7},
-                new SudokuNumber {Index = (5, 0), Number = 0},
-                new SudokuNumber {Index = (6, 0), Number = 0},
-                new SudokuNumber {Index = (7, 0), Number = 8},
-                new SudokuNumber {Index = (8, 0), Number = 0}
+                0, 0, 5, 0, 1, 0, 3, 0, 0
             });
 
-            var firstColumnSet = numberGrid.CreateColumnSet(numbers, 0);
+            var rowSets = numberGrid.CreateRowSets();
+            rowSets.TryGetValue(8, out var lastRowSet);
 
+            Assert.NotNull(lastRowSet);
+            Assert.True(expectedSet.SetEquals(lastRowSet));
+        }
+
+        [Fact]
+        public void CreateColumnSets_GivenRowIndex_ReturnsFirstColumnSet()
+        {
+            var numbers = SudokuExamples.Example;
+            var numberGrid = new NumberGrid(numbers);
+            var expectedSet = new HashSet<byte>(new List<byte>
+            {
+                0, 9, 0, 0, 7, 0, 0, 8, 0
+            });
+
+            var columnSets = numberGrid.CreateColumnSets();
+            columnSets.TryGetValue(0, out var firstColumnSet);
+
+            Assert.NotNull(firstColumnSet);
             Assert.True(expectedSet.SetEquals(firstColumnSet));
+        }
+
+        [Fact]
+        public void CreateColumnSets_GivenRowIndex_ReturnsSecondColumnSet()
+        {
+            var numbers = SudokuExamples.Example;
+            var numberGrid = new NumberGrid(numbers);
+            var expectedSet = new HashSet<byte>(new List<byte>
+            {
+                0, 0, 0, 0, 0, 0, 0, 0, 0
+            });
+
+            var columnSets = numberGrid.CreateColumnSets();
+            columnSets.TryGetValue(1, out var secondColumnSet);
+
+            Assert.True(expectedSet.SetEquals(secondColumnSet));
+        }
+
+        [Fact]
+        public void CreateColumnSets_GivenRowIndex_ReturnslastColumnSet()
+        {
+            var numbers = SudokuExamples.Example;
+            var numberGrid = new NumberGrid(numbers);
+            var expectedSet = new HashSet<byte>(new List<byte>
+            {
+                0, 1, 0, 0, 8, 0, 0, 9, 0
+            });
+
+            var columnSets = numberGrid.CreateColumnSets();
+            columnSets.TryGetValue(8, out var lastColumnSet);
+
+            Assert.True(expectedSet.SetEquals(lastColumnSet));
         }
     }
 }

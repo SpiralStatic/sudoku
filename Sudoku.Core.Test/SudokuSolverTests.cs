@@ -1,5 +1,3 @@
-using Sudoku.Core.Models;
-using System.Linq;
 using Microsoft.Extensions.Logging;
 using Moq;
 using Xunit;
@@ -23,11 +21,11 @@ namespace Sudoku.Core.Test
             var numberGrid = new NumberGrid(numbers);
 
             var sudokuSolver = new SudokuSolver(numberGrid, _logger.Object);
-            sudokuSolver.Solve(0);
+            sudokuSolver.Solve();
 
-            foreach (SudokuNumber sudokuNumber in numberGrid.Numbers)
+            foreach (var number in numberGrid.Numbers)
             {
-                Assert.NotEqual(0, sudokuNumber.Number);
+                Assert.NotEqual(0, number);
             }
         }
 
@@ -39,8 +37,7 @@ namespace Sudoku.Core.Test
             const int expectedNewNumber = 0;
 
             var sudokuSolver = new SudokuSolver(numberGrid, _logger.Object);
-            SudokuNumber firstSudokuNumber = numberGrid.Numbers.First();
-            sudokuSolver.TrySolveNumber(firstSudokuNumber, out var solvedNumber);
+            sudokuSolver.TrySolveNumber(0, 0, out var solvedNumber);
 
             Assert.Equal(expectedNewNumber, solvedNumber);
         }
@@ -53,8 +50,7 @@ namespace Sudoku.Core.Test
             const int expectedNewNumber = 0;
 
             var sudokuSolver = new SudokuSolver(numberGrid, _logger.Object);
-            SudokuNumber firstSudokuNumber = numberGrid.Numbers.First();
-            sudokuSolver.TrySolveNumber(firstSudokuNumber, out var solvedNumber);
+            sudokuSolver.TrySolveNumber(0, 0, out var solvedNumber);
 
             Assert.Equal(expectedNewNumber, solvedNumber);
         }

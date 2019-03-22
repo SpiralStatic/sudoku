@@ -1,62 +1,81 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Sudoku.Core.Models;
+﻿using System.Collections.Generic;
 
 namespace Sudoku.Core
 {
     public class NumberGrid
     {
-        public List<SudokuNumber> Numbers { get; set; }
-        public IEnumerable<HashSet<SudokuNumber>> Squares => CreateSquareSets();
-        public IEnumerable<HashSet<SudokuNumber>> Rows => CreateSudokuSets(CreateRowSet);
-        public IEnumerable<HashSet<SudokuNumber>> Columns => CreateSudokuSets(CreateColumnSet);
+        public byte[,] Numbers { get; set; }
+        public Dictionary<(byte, byte), HashSet<byte>> Squares => CreateSquareSets();
+        public Dictionary<byte, HashSet<byte>> Rows => CreateRowSets();
+        public Dictionary<byte, HashSet<byte>> Columns => CreateColumnSets();
 
-        public NumberGrid(IEnumerable<SudokuNumber> numbers)
+        public NumberGrid(byte[,] numbers)
         {
-            Numbers = numbers.ToList();
+            Numbers = numbers;
         }
 
-        public IEnumerable<HashSet<SudokuNumber>> CreateSudokuSets(Func<IEnumerable<SudokuNumber>, int, HashSet<SudokuNumber>> selectorFunction)
+        public Dictionary<(byte, byte), HashSet<byte>> CreateSquareSets()
         {
-            var sudokuSets = new List<HashSet<SudokuNumber>>();
-            for (var i = 0; i < 9; i++)
+            var sudokuSets = new Dictionary<(byte, byte), HashSet<byte>>();
+
+            for (byte rowSet = 0; rowSet < 9; rowSet += 3)
             {
-                var sudokuSet = selectorFunction(Numbers, i);
-                sudokuSets.Add(sudokuSet);
-            }
-
-            return sudokuSets;
-        }
-
-        public IEnumerable<HashSet<SudokuNumber>> CreateSquareSets()
-        {
-            var sudokuSets = new List<HashSet<SudokuNumber>>();
-
-            for (var i = 0; i < 9; i += 3)
-            {
-                for (var j = 0; j < 9; j += 3)
+                for (byte columnSet = 0; columnSet < 9; columnSet += 3)
                 {
-                    var sudokuSet = Numbers.Where(n =>
-                            (n.Row >= i) && (n.Row < i + 3) && (n.Column >= j) && (n.Column < j + 3))
-                        .ToHashSet();
-                    sudokuSets.Add(sudokuSet);
+                    var rowIndex = (byte)(rowSet / 3);
+                    var columnIndex = (byte)(columnSet / 3); ;
+                    sudokuSets.Add((rowIndex, columnIndex), new HashSet<byte>
+                    {
+                        Numbers[rowSet, columnSet],
+                        Numbers[rowSet, columnSet + 1],
+                        Numbers[rowSet, columnSet + 2],
+                        Numbers[rowSet + 1, columnSet],
+                        Numbers[rowSet + 1, columnSet + 1],
+                        Numbers[rowSet + 1, columnSet + 2],
+                        Numbers[rowSet + 2, columnSet],
+                        Numbers[rowSet + 2, columnSet + 1],
+                        Numbers[rowSet + 2, columnSet +2]
+                    });
                 }
             }
 
             return sudokuSets;
         }
 
-        public HashSet<SudokuNumber> CreateRowSet(IEnumerable<SudokuNumber> numbers, int index)
+        public Dictionary<byte, HashSet<byte>> CreateRowSets()
         {
-             return numbers.Where(n => n.Row == index)
-                 .ToHashSet();
+            var rowSets = new Dictionary<byte, HashSet<byte>>();
+            for (byte row = 0; row < 9; row++)
+            {
+                var rowSet = new HashSet<byte>();
+
+                for (var column = 0; column < 9; column++)
+                {
+                    rowSet.Add(Numbers[row, column]);
+                }
+
+                rowSets.Add(row, rowSet);
+            }
+
+            return rowSets;
         }
 
-        public HashSet<SudokuNumber> CreateColumnSet(IEnumerable<SudokuNumber> numbers, int index)
+        public Dictionary<byte, HashSet<byte>> CreateColumnSets()
         {
-            return numbers.Where(n => n.Column == index)
-                .ToHashSet();
+            var columnSets = new Dictionary<byte, HashSet<byte>>();
+            for (byte column = 0; column < 9; column++)
+            {
+                var columnSet = new HashSet<byte>();
+
+                for (var row = 0; row < 9; row++)
+                {
+                    columnSet.Add(Numbers[row, column]);
+                }
+
+                columnSets.Add(column, columnSet);
+            }
+
+            return columnSets;
         }
     }
 }

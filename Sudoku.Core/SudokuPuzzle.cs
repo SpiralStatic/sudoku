@@ -1,6 +1,4 @@
-﻿using Sudoku.Core.Models;
-
-namespace Sudoku.Core
+﻿namespace Sudoku.Core
 {
     public class SudokuPuzzle
     {

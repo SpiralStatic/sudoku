@@ -1,8 +1,5 @@
-﻿using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
 using System.Linq;
-using System.Text.RegularExpressions;
-using Sudoku.Core.Models;
 
 namespace Sudoku.Core
 {
@@ -17,23 +14,23 @@ namespace Sudoku.Core
 
         public NumberGrid ReadSudoku()
         {
-            var numbers = File.ReadLines(_filePath)
-                .SkipWhile(line => !Regex.IsMatch(line, "\\d{9}"))
-                .Select((line, rowIndex) => line.ToCharArray()
-                    .Select((number, columnIndex) => new SudokuNumber
-                    {
-                        Index = (rowIndex, columnIndex),
-                        Number = byte.Parse(number.ToString())
-                    })
-                )
-                .Aggregate(new List<SudokuNumber>(), (acc, row) =>
+            var numberGrid = new byte[9,9];
+
+            var lines = File.ReadAllLines(_filePath);
+            for (var i = 0; i < lines.Length; i++)
+            {
+                var line = lines[i];
+                var numbers = line.ToCharArray()
+                    .Select(n => byte.Parse(n.ToString()))
+                    .ToArray();
+
+                for (var j = 0; j < numbers[i]; j++)
                 {
-                    acc.AddRange(row);
+                    numberGrid[i, j] = numbers[j];
+                }
+            }
 
-                    return acc;
-                });
-
-            return new NumberGrid(numbers);
+            return new NumberGrid(numberGrid);
         }
     }
 }

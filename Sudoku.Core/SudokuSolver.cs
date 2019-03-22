@@ -2,7 +2,6 @@
 using System.Linq;
 using Microsoft.Extensions.Logging;
 using Sudoku.Core.Extensions;
-using Sudoku.Core.Models;
 
 namespace Sudoku.Core
 {
@@ -18,50 +17,48 @@ namespace Sudoku.Core
             _logger = logger;
         }
 
-        public void Solve(int position)
+        public void Solve()
         {
-            SudokuNumber nextSudokuNumber = _numberGrid.Numbers.ElementAt(position);
-            if (nextSudokuNumber.Number == 0)
+            var notSolved = false;
+            for (byte row = 0; row < _numberGrid.Numbers.GetLength(0); row++)
+            for (byte column = 0; column < _numberGrid.Numbers.GetLength(1); column++)
             {
-                var solved = TrySolveNumber(nextSudokuNumber, out var newNumber);
-                if (solved)
+                var number = _numberGrid.Numbers[row, column];
+                if (number == 0)
                 {
-                    _logger.LogSudoku(_numberGrid.Numbers, nextSudokuNumber, newNumber);
+                    var solved = TrySolveNumber(row, column, out var newNumber);
+                    if (solved)
+                    {
+                        _logger.LogInformation($"Number({row},{column}): {number} => {newNumber}");
+                        _logger.LogSudoku(_numberGrid.Rows.SelectMany(r => r.Value));
 
-                    nextSudokuNumber.Number = newNumber;
+                        _numberGrid.Numbers[row, column] = newNumber;
+                    }
+                }
+                else
+                {
+                    notSolved = true;
                 }
             }
 
-            if(position < _numberGrid.Numbers.Count - 1)
+            if (notSolved)
             {
-                Solve(position + 1);
-            }
-            else
-            {
-                var firstNotSolvedIndex = _numberGrid.Numbers.TakeWhile(n => n.Number != 0).Count();
-                if (firstNotSolvedIndex != _numberGrid.Numbers.Count)
-                {
-                    _logger.LogInformation($"Resolving from: SudokuNumber{_numberGrid.Numbers[firstNotSolvedIndex].Index}");
-                    Solve(firstNotSolvedIndex);
-                }
+                Solve();
             }
         }
 
-        public bool TrySolveNumber(SudokuNumber sudokuNumber, out byte result)
+        public bool TrySolveNumber(byte row, byte column, out byte result)
         {
-            var currentRowNumbers = _numberGrid.Rows.ElementAt(sudokuNumber.Row)
-                .Where(n => n.Number != 0)
-                .Select(n => n.Number);
-            var currentColumnNumbers = _numberGrid.Columns.ElementAt(sudokuNumber.Column)
-                .Where(n => n.Number != 0)
-                .Select(n => n.Number);
+            _numberGrid.Rows.TryGetValue(row, out var rowNumbers);
+            var currentRowNumbers =  (rowNumbers ?? throw new IndexOutOfRangeException()).Where(n => n != 0);
 
-            var squareRow = Math.Ceiling((sudokuNumber.Row + 1.00) / 3.00) - 1;
-            var squareColumn = Math.Ceiling((sudokuNumber.Column + 1.00) / 3.00) - 1;
-            var currentSquare = squareRow + squareColumn;
-            var currentSquareNumbers = _numberGrid.Squares.ElementAt((int)currentSquare)
-                .Where(n => n.Number != 0)
-                .Select(n => n.Number);
+            _numberGrid.Columns.TryGetValue(column, out var columnNumbers);
+            var currentColumnNumbers = (columnNumbers ?? throw new IndexOutOfRangeException()).Where(n => n != 0);
+
+            var squareRow = (byte)Scale(row, 0, 8, 0, 2);
+            var squareColumn = (byte)Scale(column, 0, 8, 0, 2);
+            _numberGrid.Squares.TryGetValue((squareRow, squareColumn), out var squareNumbers);
+            var currentSquareNumbers = (squareNumbers ?? throw new IndexOutOfRangeException()).Where(n => n != 0);
 
             var possibleNumbers = _possibleNumbers.Except(currentRowNumbers)
                 .Except(currentColumnNumbers)
@@ -77,6 +74,12 @@ namespace Sudoku.Core
 
             result = 0;
             return false;
+        }
+
+        private double Scale(int value, int min, int max, int minScale, int maxScale)
+        {
+            var scaled = minScale + (double)(value - min) / (max - min) * (maxScale - minScale);
+            return Math.Round(scaled);
         }
     }
 }

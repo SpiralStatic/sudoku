@@ -22,7 +22,7 @@ namespace Sudoku.ConsoleApp
             NumberGrid numberGrid = sudokuFileReader.ReadSudoku();
 
             var sudokuSolver = new SudokuSolver(numberGrid, serviceProvider.GetRequiredService<ILogger<SudokuSolver>>());
-            sudokuSolver.Solve(0);
+            sudokuSolver.Solve();
         }
 
         public static void ConfigureServices(IServiceCollection services)

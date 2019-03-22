@@ -3,22 +3,19 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using Microsoft.Extensions.Logging;
-using Sudoku.Core.Models;
 
 namespace Sudoku.Core.Extensions
 {
     public static class LoggerExtensions
     {
-        public static void LogSudoku(this ILogger logger, IEnumerable<SudokuNumber> numbers, SudokuNumber sudokuNumber, int newNumber)
+        public static void LogSudoku(this ILogger logger, IEnumerable<byte> rows)
         {
-            var numbersArray = numbers.ToImmutableArray();
+            var rowsArray = rows.ToImmutableArray();
 
-            logger.LogInformation($"SudokuNumber{sudokuNumber.Index}: {sudokuNumber.Number} => {newNumber}");
-            
-            for (var i = 0; i < numbersArray.Count(); i += 9)
+            for (var i = 0; i < rowsArray.Count(); i += 9)
             {
                 var rowIndex = i;
-                var row = numbersArray.Where(n => n.Row == rowIndex / 9).Select(n => n.Number);
+                var row = rowsArray.Where(n => n == rowIndex / 9);
                 logger.LogInformation(string.Join("", row));
             }
 

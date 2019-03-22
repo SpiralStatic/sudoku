@@ -1,7 +1,4 @@
-﻿using System.IO;
-using Sudoku.Core.Models;
-
-namespace Sudoku.Core
+﻿namespace Sudoku.Core
 {
     public interface ISudokuReader
     {

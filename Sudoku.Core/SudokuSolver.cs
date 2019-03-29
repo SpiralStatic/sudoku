@@ -7,32 +7,30 @@ namespace Sudoku.Core
 {
     public class SudokuSolver
     {
-        private readonly NumberGrid _numberGrid;
         private readonly byte[] _possibleNumbers = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
         private readonly ILogger _logger;
 
-        public SudokuSolver(NumberGrid numberGrid, ILogger<SudokuSolver> logger)
+        public SudokuSolver(ILogger<SudokuSolver> logger)
         {
-            _numberGrid = numberGrid;
             _logger = logger;
         }
 
-        public void Solve()
+        public void Solve(SudokuPuzzle puzzle)
         {
             var notSolved = false;
-            for (byte row = 0; row < _numberGrid.Numbers.GetLength(0); row++)
-            for (byte column = 0; column < _numberGrid.Numbers.GetLength(1); column++)
+            for (byte row = 0; row < puzzle.Grid.Numbers.GetLength(0); row++)
+            for (byte column = 0; column < puzzle.Grid.Numbers.GetLength(1); column++)
             {
-                var number = _numberGrid.Numbers[row, column];
+                var number = puzzle.Grid.Numbers[row, column];
                 if (number == 0)
                 {
-                    var solved = TrySolveNumber(row, column, out var newNumber);
+                    var solved = TrySolveNumber(puzzle.Grid, row, column, out var newNumber);
                     if (solved)
                     {
                         _logger.LogInformation($"Number({row},{column}): {number} => {newNumber}");
-                        _logger.LogSudoku(_numberGrid.Rows.SelectMany(r => r.Value));
+                        _logger.LogSudoku(puzzle.Grid.Rows.SelectMany(r => r.Value));
 
-                        _numberGrid.Numbers[row, column] = newNumber;
+                            puzzle.Grid.Numbers[row, column] = newNumber;
                     }
                     else
                     {
@@ -43,21 +41,21 @@ namespace Sudoku.Core
 
             if (notSolved)
             {
-                Solve();
+                Solve(puzzle);
             }
         }
 
-        public bool TrySolveNumber(byte row, byte column, out byte result)
+        public bool TrySolveNumber(NumberGrid grid, byte row, byte column, out byte result)
         {
-            _numberGrid.Rows.TryGetValue(row, out var rowNumbers);
+            grid.Rows.TryGetValue(row, out var rowNumbers);
             var currentRowNumbers =  (rowNumbers ?? throw new IndexOutOfRangeException()).Where(n => n != 0);
 
-            _numberGrid.Columns.TryGetValue(column, out var columnNumbers);
+            grid.Columns.TryGetValue(column, out var columnNumbers);
             var currentColumnNumbers = (columnNumbers ?? throw new IndexOutOfRangeException()).Where(n => n != 0);
 
             var squareRow = (byte)Scale(row, 0, 8, 0, 2);
             var squareColumn = (byte)Scale(column, 0, 8, 0, 2);
-            _numberGrid.Squares.TryGetValue((squareRow, squareColumn), out var squareNumbers);
+            grid.Squares.TryGetValue((squareRow, squareColumn), out var squareNumbers);
             var currentSquareNumbers = (squareNumbers ?? throw new IndexOutOfRangeException()).Where(n => n != 0);
 
             var possibleNumbers = _possibleNumbers.Except(currentRowNumbers)

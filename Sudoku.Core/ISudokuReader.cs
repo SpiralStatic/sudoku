@@ -1,7 +1,9 @@
-﻿namespace Sudoku.Core
+﻿using System.IO;
+
+namespace Sudoku.Core
 {
     public interface ISudokuReader
     {
-        NumberGrid ReadSudoku();
+        SudokuPuzzle ReadSudoku(Stream stream);
     }
 }

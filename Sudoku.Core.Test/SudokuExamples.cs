@@ -2,7 +2,8 @@
 {
     public static class SudokuExamples
     {
-        public static byte[,] Example = {
+        public static SudokuPuzzle Example = new SudokuPuzzle(new NumberGrid(new byte[,]
+        {
             {
                 0, 0, 3, 0, 2, 0, 6, 0, 0
             },
@@ -30,6 +31,6 @@
             {
                 0, 0, 5, 0, 1, 0, 3, 0 ,0
             }
-        };
+        }));
     }
 }

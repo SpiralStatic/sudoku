@@ -12,18 +12,16 @@ namespace Sudoku.Core.Test
         {
             _logger = new Mock<ILogger<SudokuSolver>>();
         }
-
         
         [Fact]
         public void TrySolve_GivenNumberGrid_ProducesFinishedGrid()
         {
-            var numbers = SudokuExamples.Example;
-            var numberGrid = new NumberGrid(numbers);
+            var puzzle = SudokuExamples.Example;
 
-            var sudokuSolver = new SudokuSolver(numberGrid, _logger.Object);
-            sudokuSolver.Solve();
+            var sudokuSolver = new SudokuSolver(_logger.Object);
+            sudokuSolver.Solve(puzzle);
 
-            foreach (var number in numberGrid.Numbers)
+            foreach (var number in puzzle.Grid.Numbers)
             {
                 Assert.NotEqual(0, number);
             }
@@ -32,12 +30,11 @@ namespace Sudoku.Core.Test
         [Fact]
         public void TrySolveNumber_GivenNumberWithOnePossibleResults_ReturnsCorrectResult()
         {
-            var numbers = SudokuExamples.Example;
-            var numberGrid = new NumberGrid(numbers);
+            var grid = SudokuExamples.Example.Grid;
             const int expectedNewNumber = 0;
 
-            var sudokuSolver = new SudokuSolver(numberGrid, _logger.Object);
-            sudokuSolver.TrySolveNumber(0, 0, out var solvedNumber);
+            var sudokuSolver = new SudokuSolver(_logger.Object);
+            sudokuSolver.TrySolveNumber(grid, 0, 0, out var solvedNumber);
 
             Assert.Equal(expectedNewNumber, solvedNumber);
         }
@@ -45,12 +42,11 @@ namespace Sudoku.Core.Test
         [Fact]
         public void TrySolveNumber_GivenNumberWithTwoPossibleResults_Returns0()
         {
-            var numbers = SudokuExamples.Example;
-            var numberGrid = new NumberGrid(numbers);
+            var grid = SudokuExamples.Example.Grid;
             const int expectedNewNumber = 0;
 
-            var sudokuSolver = new SudokuSolver(numberGrid, _logger.Object);
-            sudokuSolver.TrySolveNumber(0, 0, out var solvedNumber);
+            var sudokuSolver = new SudokuSolver(_logger.Object);
+            sudokuSolver.TrySolveNumber(grid, 0, 0, out var solvedNumber);
 
             Assert.Equal(expectedNewNumber, solvedNumber);
         }

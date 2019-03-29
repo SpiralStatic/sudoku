@@ -8,7 +8,7 @@ namespace Sudoku.Core.Test
         [Fact]
         public void CreateSquareSets_GivenSquareIndex_ReturnsFirstSquareSet()
         {
-            var numbers = SudokuExamples.Example;
+            var numbers = SudokuExamples.Example.Grid.Numbers;
             var numberGrid = new NumberGrid(numbers);
             var expectedSet = new HashSet<byte>(new List<byte>
             {
@@ -25,7 +25,7 @@ namespace Sudoku.Core.Test
         [Fact]
         public void CreateSquareSets_GivenSquareIndex_ReturnsSecondSquareSet()
         {
-            var numbers = SudokuExamples.Example;
+            var numbers = SudokuExamples.Example.Grid.Numbers;
             var numberGrid = new NumberGrid(numbers);
             var expectedSet = new HashSet<byte>(new List<byte>
             {
@@ -42,7 +42,7 @@ namespace Sudoku.Core.Test
         [Fact]
         public void CreateSquareSets_GivenSquareIndex_ReturnsLastSquareSet()
         {
-            var numbers = SudokuExamples.Example;
+            var numbers = SudokuExamples.Example.Grid.Numbers;
             var numberGrid = new NumberGrid(numbers);
             var expectedSet = new HashSet<byte>(new List<byte>
             {
@@ -59,7 +59,7 @@ namespace Sudoku.Core.Test
         [Fact]
         public void CreateRowSets_GivenRowIndex_ReturnsFirstRowSet()
         {
-            var numbers = SudokuExamples.Example;
+            var numbers = SudokuExamples.Example.Grid.Numbers;
             var numberGrid = new NumberGrid(numbers);
             var expectedSet = new HashSet<byte>(new List<byte>
             {
@@ -76,7 +76,7 @@ namespace Sudoku.Core.Test
         [Fact]
         public void CreateRowSets_GivenRowIndex_ReturnsSecondRowSet()
         {
-            var numbers = SudokuExamples.Example;
+            var numbers = SudokuExamples.Example.Grid.Numbers;
             var numberGrid = new NumberGrid(numbers);
             var expectedSet = new HashSet<byte>(new List<byte>
             {
@@ -93,7 +93,7 @@ namespace Sudoku.Core.Test
         [Fact]
         public void CreateRowSets_GivenRowIndex_ReturnsLastRowSet()
         {
-            var numbers = SudokuExamples.Example;
+            var numbers = SudokuExamples.Example.Grid.Numbers;
             var numberGrid = new NumberGrid(numbers);
             var expectedSet = new HashSet<byte>(new List<byte>
             {
@@ -110,7 +110,7 @@ namespace Sudoku.Core.Test
         [Fact]
         public void CreateColumnSets_GivenRowIndex_ReturnsFirstColumnSet()
         {
-            var numbers = SudokuExamples.Example;
+            var numbers = SudokuExamples.Example.Grid.Numbers;
             var numberGrid = new NumberGrid(numbers);
             var expectedSet = new HashSet<byte>(new List<byte>
             {
@@ -127,7 +127,7 @@ namespace Sudoku.Core.Test
         [Fact]
         public void CreateColumnSets_GivenRowIndex_ReturnsSecondColumnSet()
         {
-            var numbers = SudokuExamples.Example;
+            var numbers = SudokuExamples.Example.Grid.Numbers;
             var numberGrid = new NumberGrid(numbers);
             var expectedSet = new HashSet<byte>(new List<byte>
             {
@@ -143,7 +143,7 @@ namespace Sudoku.Core.Test
         [Fact]
         public void CreateColumnSets_GivenRowIndex_ReturnslastColumnSet()
         {
-            var numbers = SudokuExamples.Example;
+            var numbers = SudokuExamples.Example.Grid.Numbers;
             var numberGrid = new NumberGrid(numbers);
             var expectedSet = new HashSet<byte>(new List<byte>
             {

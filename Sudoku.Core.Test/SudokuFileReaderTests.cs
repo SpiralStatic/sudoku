@@ -1,3 +1,4 @@
+using System.IO;
 using Xunit;
 
 namespace Sudoku.Core.Test
@@ -8,13 +9,14 @@ namespace Sudoku.Core.Test
 
         [Fact]
         public void ReadFile_GivenSingleSudokuInput_ReturnsSudokuObject()
-        {
-            var sudokuFileReader = new SudokuFileReader(ExampleSudokuFile);
-            var expectedNumbers = SudokuExamples.Example;
+        {   
+            var expectedNumbers = SudokuExamples.Example.Grid.Numbers;
 
-            NumberGrid numberGrid = sudokuFileReader.ReadSudoku();
+            var sudokuFileReader = new SudokuFileReader();
 
-            Assert.Equal(expectedNumbers, numberGrid.Numbers);
+            SudokuPuzzle puzzle = sudokuFileReader.ReadSudoku(File.OpenRead(ExampleSudokuFile));
+
+            Assert.Equal(expectedNumbers, puzzle.Grid.Numbers);
         }
     }
 }

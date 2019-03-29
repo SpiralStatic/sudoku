@@ -1,12 +1,18 @@
-﻿namespace Sudoku.Core
+﻿using System.Data.HashFunction.xxHash;
+using System.Linq;
+
+namespace Sudoku.Core
 {
     public class SudokuPuzzle
     {
-        private NumberGrid _grid;
+        public static readonly IxxHash _xxHashFactory = xxHashFactory.Instance.Create();
+        public NumberGrid Grid { get; set; }
+        public string Name { get; }
 
-        public SudokuPuzzle(ISudokuReader sudokuReader)
+        public SudokuPuzzle(NumberGrid numberGrid)
         {
-            _grid = sudokuReader.ReadSudoku();
+            Grid = numberGrid;
+            Name = _xxHashFactory.ComputeHash(numberGrid.Rows.Values.SelectMany(n => n).ToArray()).AsHexString();
         }
     }
 }

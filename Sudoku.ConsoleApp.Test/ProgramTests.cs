@@ -40,14 +40,14 @@ namespace Sudoku.ConsoleApp.Test
             Assert.Contains(expectedExitCode, output.ToString());
         }
 
-        //[Fact]
-        //public void Main_GivenInvalidSudoku_ReturnsFailedToSolvePuzzleExitCode()
-        //{
-        //    var InvalidSudokuFile = "SudokuInputFiles/sudoku_example_invalid.txt";
-        //    var expectedExitCode = (int)ExitCode.FailedToSolvePuzzle;
+        [Fact]
+        public void Main_GivenInvalidSudoku_ReturnsFailedToSolvePuzzleExitCode()
+        {
+            var InvalidSudokuFile = "SudokuInputFiles/sudoku_example_invalid.txt";
+            var expectedExitCode = (int)ExitCode.FailedToSolvePuzzle;
 
-        //    Assert.Equal(expectedExitCode, Program.Main(new[] { InvalidSudokuFile }));
-        //}
+            Assert.Equal(expectedExitCode, Program.Main(new[] { InvalidSudokuFile }));
+        }
 
         [Fact]
         public void Main_GivenValidSudoku_ReturnsSuccessExitCode()

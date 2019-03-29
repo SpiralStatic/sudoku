@@ -9,14 +9,20 @@ namespace Sudoku.Core
     {
         private readonly byte[] _possibleNumbers = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
         private readonly ILogger _logger;
+        private int attempts = 0;
 
         public SudokuSolver(ILogger<SudokuSolver> logger)
         {
             _logger = logger;
         }
 
-        public void Solve(SudokuPuzzle puzzle)
+        public bool Solve(SudokuPuzzle puzzle)
         {
+            if (attempts == 2)
+            {
+                return false;
+            }
+
             var notSolved = false;
             for (byte row = 0; row < puzzle.Grid.Numbers.GetLength(0); row++)
             for (byte column = 0; column < puzzle.Grid.Numbers.GetLength(1); column++)
@@ -30,7 +36,8 @@ namespace Sudoku.Core
                         _logger.LogInformation($"Number({row},{column}): {number} => {newNumber}");
                         _logger.LogSudoku(puzzle.Grid.Rows.SelectMany(r => r.Value));
 
-                            puzzle.Grid.Numbers[row, column] = newNumber;
+                        puzzle.Grid.Numbers[row, column] = newNumber;
+                        attempts = 0;
                     }
                     else
                     {
@@ -41,7 +48,12 @@ namespace Sudoku.Core
 
             if (notSolved)
             {
-                Solve(puzzle);
+                attempts++;
+                return Solve(puzzle);
+            }
+            else
+            {
+                return true;
             }
         }
 

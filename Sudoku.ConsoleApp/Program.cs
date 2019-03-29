@@ -23,11 +23,9 @@ namespace Sudoku.ConsoleApp
                 return (int)argumentsSucessCode;
             }
 
-            ConfigureServices();           
+            ConfigureServices();
 
-            SolveSudokuPuzzles(args);
-          
-            return (int)ExitCode.Success;
+            return (int)SolveSudokuPuzzles(args);
         }
 
         private static void ConfigureLogger()
@@ -73,11 +71,15 @@ namespace Sudoku.ConsoleApp
         private static ExitCode SolveSudokuPuzzles(string[] filePaths)
         {
 
-            foreach(var sudokuFilePath in filePaths)
+            foreach (var sudokuFilePath in filePaths)
             {
                 SudokuPuzzle puzzle = _sudokuFileReader.ReadSudoku(File.OpenRead(sudokuFilePath));
                 var sudokuSolver = new SudokuSolver(_serviceProvider.GetRequiredService<ILogger<SudokuSolver>>());
-                sudokuSolver.Solve(puzzle);
+
+                if (!sudokuSolver.Solve(puzzle))
+                {
+                    return ExitCode.FailedToSolvePuzzle;
+                }
             }
 
             return ExitCode.Success;

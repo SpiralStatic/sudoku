@@ -16,7 +16,7 @@ namespace Sudoku.Core.Test
         [Fact]
         public void TrySolve_GivenNumberGrid_ProducesFinishedGrid()
         {
-            var puzzle = SudokuExamples.Example;
+            var puzzle = SudokuExamples.Simple;
 
             var sudokuSolver = new SudokuSolver(_logger.Object);
             sudokuSolver.Solve(puzzle);
@@ -30,7 +30,7 @@ namespace Sudoku.Core.Test
         [Fact]
         public void TrySolveNumber_GivenNumberWithOnePossibleResults_ReturnsCorrectResult()
         {
-            var grid = SudokuExamples.Example.Grid;
+            var grid = SudokuExamples.Simple.Grid;
             const int expectedNewNumber = 0;
 
             var sudokuSolver = new SudokuSolver(_logger.Object);
@@ -42,7 +42,7 @@ namespace Sudoku.Core.Test
         [Fact]
         public void TrySolveNumber_GivenNumberWithTwoPossibleResults_Returns0()
         {
-            var grid = SudokuExamples.Example.Grid;
+            var grid = SudokuExamples.Simple.Grid;
             const int expectedNewNumber = 0;
 
             var sudokuSolver = new SudokuSolver(_logger.Object);

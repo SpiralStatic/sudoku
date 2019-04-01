@@ -2,7 +2,7 @@
   "profiles": {
     "Sudoku.ConsoleApp": {
       "commandName": "Project",
-      "commandLineArgs": "\"../../../../Sudoku.Core.Test/SudokuInputFiles/sudoku_example_single.txt\""
+      "commandLineArgs": "\"../../../../Sudoku.Core.Test/SudokuInputFiles/sudoku_example_list.txt\""
     }
   }
 }

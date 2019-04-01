@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging;
 using Serilog;
 using Sudoku.Core;
 using System;
+using System.Collections.Generic;
 using System.IO;
 
 namespace Sudoku.ConsoleApp
@@ -70,15 +71,19 @@ namespace Sudoku.ConsoleApp
 
         private static ExitCode SolveSudokuPuzzles(string[] filePaths)
         {
-
             foreach (var sudokuFilePath in filePaths)
             {
-                SudokuPuzzle puzzle = _sudokuFileReader.ReadSudoku(File.OpenRead(sudokuFilePath));
-                var sudokuSolver = new SudokuSolver(_serviceProvider.GetRequiredService<ILogger<SudokuSolver>>());
-
-                if (!sudokuSolver.Solve(puzzle))
+                IEnumerable<SudokuPuzzle> puzzles = _sudokuFileReader.ReadSudokus(File.OpenRead(sudokuFilePath));
+                foreach (var puzzle in puzzles)
                 {
-                    return ExitCode.FailedToSolvePuzzle;
+                    var sudokuSolver = new SudokuSolver(_serviceProvider.GetRequiredService<ILogger<SudokuSolver>>());
+
+                    if (!sudokuSolver.Solve(puzzle))
+                    {
+                        Log.Logger.Fatal($"{ExitCode.FailedToSolvePuzzle.ToString()}: {puzzle.Name}{Environment.NewLine}@ {sudokuFilePath}");
+
+                        return ExitCode.FailedToSolvePuzzle;
+                    }
                 }
             }
 

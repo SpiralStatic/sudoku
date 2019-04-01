@@ -9,10 +9,10 @@ namespace Sudoku.Core
         public NumberGrid Grid { get; set; }
         public string Name { get; }
 
-        public SudokuPuzzle(NumberGrid numberGrid)
+        public SudokuPuzzle(NumberGrid numberGrid, string name)
         {
             Grid = numberGrid;
-            Name = _xxHashFactory.ComputeHash(numberGrid.Rows.Values.SelectMany(n => n).ToArray()).AsHexString();
+            Name = !string.IsNullOrEmpty(name) ?  name : _xxHashFactory.ComputeHash(numberGrid.Rows.Values.SelectMany(n => n).ToArray()).AsHexString();
         }
     }
 }
